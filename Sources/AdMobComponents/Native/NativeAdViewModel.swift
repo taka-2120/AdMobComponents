@@ -48,7 +48,14 @@ class NativeAdViewModel: NSObject, GADNativeAdLoaderDelegate, GADNativeAdDelegat
     }
 
     private func startAdRefreshingTimer() {
-        adRefreshTimer = Timer.scheduledTimer(timeInterval: adRefreshInterval, target: self, selector: #selector(loadAds), userInfo: nil, repeats: true)
+        adRefreshTimer = Timer.scheduledTimer(
+            timeInterval: adRefreshInterval,
+            target: self,
+            selector: #selector(loadAds),
+            userInfo: nil,
+            repeats: true
+        )
+        adRefreshTimer?.fire()
     }
 
     private func stopAdRefreshingTimer() {

@@ -26,12 +26,12 @@ class BannerAdViewController: UIViewController, GADBannerViewDelegate {
     }
 
     override func viewDidLoad() {
+        loadBannerAd()
         super.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        loadBannerAd()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -57,6 +57,7 @@ class BannerAdViewController: UIViewController, GADBannerViewDelegate {
         bannerView?.load(request)
 
         guard let bannerView else {
+            print("Unable to get banner ad.")
             return
         }
         setAdView(bannerView)

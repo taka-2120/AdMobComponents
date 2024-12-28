@@ -84,7 +84,7 @@ This package contains useful Banner and Native Ads components for Google AdMob.
     ...
 
     yourView
-        .bannerAd(isPresented: $isBannerAdPresented, adUnitID: "ca-app-pub-....")
+        .bannerAd(isPresented: isBannerAdPresented, adUnitID: "ca-app-pub-....")
     ```
 
 - Add `NativeAdView` component into your `View`.

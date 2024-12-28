@@ -22,6 +22,12 @@ let package = Package(
             name: "AdMobComponents",
             dependencies: [
                 .product(name: "GoogleMobileAds", package: "swift-package-manager-google-mobile-ads"),
+            ],
+            resources: [
+                .copy("Native/NativeAdView.xib"),
+            ],
+            linkerSettings: [
+                .unsafeFlags(["-ObjC"]),
             ]
         ),
         .testTarget(

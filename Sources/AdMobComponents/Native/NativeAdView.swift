@@ -22,9 +22,15 @@ public struct NativeAdView: View {
     }
 
     public var body: some View {
-        if networkManager.isConnected || nativeAdViewModel.isAdLoaded {
+        if networkManager.isConnected && nativeAdViewModel.isAdLoaded {
             UINativeAdView(nativeAdViewModel: nativeAdViewModel, adIndex: adIndex)
                 .frame(height: 160)
+        } else if nativeAdViewModel.isLoading {
+            HStack(alignment: .center) {
+                ProgressView()
+            }
+            .frame(height: 160)
+            .background(.regularMaterial)
         } else {
             HStack(alignment: .center) {
                 Spacer()

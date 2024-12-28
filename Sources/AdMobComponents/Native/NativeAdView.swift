@@ -24,6 +24,7 @@ public struct NativeAdView: View {
     public var body: some View {
         if networkManager.isConnected || nativeAdViewModel.isAdLoaded {
             UINativeAdView(nativeAdViewModel: nativeAdViewModel, adIndex: adIndex)
+                .frame(height: 160)
         } else {
             HStack(alignment: .center) {
                 Spacer()

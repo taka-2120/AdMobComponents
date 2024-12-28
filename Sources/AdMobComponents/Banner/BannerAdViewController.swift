@@ -17,7 +17,7 @@ class BannerAdViewController: UIViewController, GADBannerViewDelegate {
 
     init(adUnitID: String) {
         self.adUnitID = adUnitID
-        super.init()
+        super.init(nibName: nil, bundle: nil)
     }
 
     @available(*, unavailable)
@@ -43,15 +43,12 @@ class BannerAdViewController: UIViewController, GADBannerViewDelegate {
     }
 
     private func loadBannerAd() {
-        // adding Unit Id
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         bannerView?.adUnitID = adUnitID
 
-        // make this root and set delegate
         bannerView?.delegate = self
         bannerView?.rootViewController = self
 
-        // setting banner size
         let bannerWidth = view.frame.size.width
         bannerView?.adSize = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(bannerWidth)
 

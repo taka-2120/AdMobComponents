@@ -2,7 +2,7 @@
 
 ## Description
 
-This package contains useful Banner and NativeAd components for Google AdMob.
+This package contains useful Banner and Native Ads components for Google AdMob.
 
 ## Requirements
 
@@ -46,19 +46,6 @@ This package contains useful Banner and NativeAd components for Google AdMob.
           ),
       ]
       ```
-
-- Add locally
-
-  1. Clone this repository.
-
-      ```shell
-      git clone https://github.com/taka-2120/AdMobComponents.git
-      ```
-
-  2. Add this package to your project.
-
-      ```shell
-
 
 ### Usage
 

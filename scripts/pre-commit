@@ -1,0 +1,4 @@
+#!/bin/bash
+
+chmod +x scripts/git-format-staged
+python3 scripts/git-format-staged --formatter "swiftformat stdin --stdinpath '{}'" "*.swift"

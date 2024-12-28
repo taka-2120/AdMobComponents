@@ -27,7 +27,9 @@ public struct NativeAdView: View {
                 .frame(height: 160)
         } else if nativeAdViewModel.isLoading {
             HStack(alignment: .center) {
+                Spacer()
                 ProgressView()
+                Spacer()
             }
             .frame(height: 160)
             .background(.regularMaterial)
@@ -36,13 +38,17 @@ public struct NativeAdView: View {
                 Spacer()
                 Image(systemName: "network.slash")
                     .opacity(0.6)
-                Text("ad_offline")
+                Text("ad_offline", bundle: .module)
                 Spacer()
             }
             .frame(height: 160)
             .background(.regularMaterial)
         }
     }
+}
+
+#Preview {
+    NativeAdView(showsAt: 0)
 }
 
 private struct UINativeAdView: UIViewRepresentable {

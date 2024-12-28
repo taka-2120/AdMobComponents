@@ -59,6 +59,7 @@ class NativeAdViewModel: NSObject, GADNativeAdLoaderDelegate, GADNativeAdDelegat
 
     @objc private func loadAds() {
         guard canLoadAds else { return }
+        isLoading = true
 
         let multipleAdOptions = GADMultipleAdsAdLoaderOptions()
         multipleAdOptions.numberOfAds = adCount

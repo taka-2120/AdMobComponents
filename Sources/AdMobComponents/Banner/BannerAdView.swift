@@ -21,7 +21,9 @@ struct BannerAdView: View {
             UIBannerAdView(viewController: viewController)
         } else if !viewController.isAdLoaded {
             HStack(alignment: .center) {
+                Spacer()
                 ProgressView()
+                Spacer()
             }
             .frame(height: 60)
             .background(.regularMaterial)
@@ -30,7 +32,7 @@ struct BannerAdView: View {
                 Spacer()
                 Image(systemName: "network.slash")
                     .opacity(0.6)
-                Text("ad_offline")
+                Text("ad_offline", bundle: .module)
                 Spacer()
             }
             .frame(height: 60)

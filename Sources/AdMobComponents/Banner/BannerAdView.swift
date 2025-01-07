@@ -17,9 +17,9 @@ struct BannerAdView: View {
     }
 
     var body: some View {
-        if networkManager.isConnected && viewController.isAdLoaded {
+        if networkManager.isConnected && viewController.isAdLoading {
             UIBannerAdView(viewController: viewController)
-        } else if !viewController.isAdLoaded {
+        } else if !viewController.isAdLoading {
             HStack(alignment: .center) {
                 Spacer()
                 ProgressView()

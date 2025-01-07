@@ -8,12 +8,11 @@
 import GoogleMobileAds
 import UIKit
 
+@Observable
 class BannerAdViewController: UIViewController, GADBannerViewDelegate {
     private let adUnitID: String
     private var bannerView: GADBannerView?
-    var isAdLoaded: Bool {
-        bannerView != nil
-    }
+    var isAdLoading = true
 
     init(adUnitID: String) {
         self.adUnitID = adUnitID
@@ -61,6 +60,7 @@ class BannerAdViewController: UIViewController, GADBannerViewDelegate {
             return
         }
         setAdView(bannerView)
+        isAdLoading = false
     }
 
     private func setAdView(_ view: GADBannerView) {

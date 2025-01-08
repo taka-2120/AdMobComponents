@@ -25,20 +25,8 @@ class BannerAdViewController: UIViewController, GADBannerViewDelegate {
     }
 
     override func viewDidLoad() {
-        loadBannerAd()
         super.viewDidLoad()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: nil) { [weak self] _ in
-            guard let self = self else { return }
-            self.loadBannerAd()
-        }
+        loadBannerAd()
     }
 
     private func loadBannerAd() {

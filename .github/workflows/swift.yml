@@ -20,6 +20,12 @@ jobs:
       - name: Get swift version
         run: swift --version
 
+      - name: Reset package caches
+        run: swift package reset
+
+      - name: Resolve packages
+        run: swift package resolve
+
       - name: Build
         run: swift build -v
 

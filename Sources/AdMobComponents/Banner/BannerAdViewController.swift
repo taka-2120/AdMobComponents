@@ -8,12 +8,11 @@
 import GoogleMobileAds
 import UIKit
 
+@Observable
 class BannerAdViewController: UIViewController, GADBannerViewDelegate {
     private let adUnitID: String
     private var bannerView: GADBannerView?
-    var isAdLoaded: Bool {
-        bannerView != nil
-    }
+    var isAdLoading = true
 
     init(adUnitID: String) {
         self.adUnitID = adUnitID
@@ -27,19 +26,7 @@ class BannerAdViewController: UIViewController, GADBannerViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         loadBannerAd()
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: nil) { [weak self] _ in
-            guard let self = self else { return }
-            self.loadBannerAd()
-        }
     }
 
     private func loadBannerAd() {
@@ -57,9 +44,11 @@ class BannerAdViewController: UIViewController, GADBannerViewDelegate {
         bannerView?.load(request)
 
         guard let bannerView else {
+            print("Unable to get banner ad.")
             return
         }
         setAdView(bannerView)
+        isAdLoading = false
     }
 
     private func setAdView(_ view: GADBannerView) {

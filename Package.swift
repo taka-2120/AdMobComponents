@@ -24,7 +24,8 @@ let package = Package(
                 .product(name: "GoogleMobileAds", package: "swift-package-manager-google-mobile-ads"),
             ],
             resources: [
-                .copy("Native/NativeAdView.xib"),
+                .process("Localizable.xcstrings"),
+                .process("Native/NativeAdView.xib"),
             ],
             linkerSettings: [
                 .unsafeFlags(["-ObjC"]),

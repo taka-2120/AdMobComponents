@@ -17,14 +17,22 @@ struct BannerAdView: View {
     }
 
     var body: some View {
-        if networkManager.isConnected || viewController.isAdLoaded {
+        if networkManager.isConnected && viewController.isAdLoading {
             UIBannerAdView(viewController: viewController)
+        } else if !viewController.isAdLoading {
+            HStack(alignment: .center) {
+                Spacer()
+                ProgressView()
+                Spacer()
+            }
+            .frame(height: 60)
+            .background(.regularMaterial)
         } else {
             HStack(alignment: .center) {
                 Spacer()
                 Image(systemName: "network.slash")
                     .opacity(0.6)
-                Text("ad_offline")
+                Text("ad_offline", bundle: .module)
                 Spacer()
             }
             .frame(height: 60)

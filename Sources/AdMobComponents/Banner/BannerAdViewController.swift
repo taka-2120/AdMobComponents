@@ -12,7 +12,8 @@ import UIKit
 class BannerAdViewController: UIViewController, GADBannerViewDelegate {
     private let adUnitID: String
     private var bannerView: GADBannerView?
-    var isAdLoading = true
+    private(set) var isLoading = false
+    private(set) var unableToLoad = false
 
     init(adUnitID: String) {
         self.adUnitID = adUnitID
@@ -30,6 +31,7 @@ class BannerAdViewController: UIViewController, GADBannerViewDelegate {
     }
 
     private func loadBannerAd() {
+        isLoading = true
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         bannerView?.adUnitID = adUnitID
 
@@ -44,11 +46,12 @@ class BannerAdViewController: UIViewController, GADBannerViewDelegate {
         bannerView?.load(request)
 
         guard let bannerView else {
-            print("Unable to get banner ad.")
+            isLoading = false
+            unableToLoad = true
             return
         }
         setAdView(bannerView)
-        isAdLoading = false
+        isLoading = false
     }
 
     private func setAdView(_ view: GADBannerView) {

@@ -23,11 +23,9 @@ class NativeAdViewModel: NSObject, GADNativeAdLoaderDelegate, GADNativeAdDelegat
     private let adRefreshInterval: TimeInterval
     private var adRefreshTimer: Timer?
     private var adLoader: GADAdLoader?
-    var nativeAds = [GADNativeAd]()
-    var isLoading = false
-    var isAdLoaded: Bool {
-        nativeAds != [] && adLoader != nil
-    }
+    private(set) var nativeAds = [GADNativeAd]()
+    private(set) var isLoading = false
+    private(set) var unableToLoad = false
 
     init(adCount: Int, adUnitID: String, canLoadAds: Bool, adRefreshInterval: TimeInterval) {
         self.adCount = adCount
@@ -67,6 +65,7 @@ class NativeAdViewModel: NSObject, GADNativeAdLoaderDelegate, GADNativeAdDelegat
     @objc private func loadAds() {
         guard canLoadAds else { return }
         isLoading = true
+        nativeAds.removeAll()
 
         let multipleAdOptions = GADMultipleAdsAdLoaderOptions()
         multipleAdOptions.numberOfAds = adCount
@@ -75,7 +74,11 @@ class NativeAdViewModel: NSObject, GADNativeAdLoaderDelegate, GADNativeAdDelegat
             rootViewController: nil,
             adTypes: [.native], options: [multipleAdOptions]
         )
-        guard let adLoader else { return }
+        guard let adLoader else {
+            isLoading = false
+            unableToLoad = true
+            return
+        }
         adLoader.delegate = self
         adLoader.load(GADRequest())
     }

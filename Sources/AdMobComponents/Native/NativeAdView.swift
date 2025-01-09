@@ -22,7 +22,7 @@ public struct NativeAdView: View {
     }
 
     public var body: some View {
-        if networkManager.isConnected && nativeAdViewModel.isAdLoaded {
+        if networkManager.isConnected && !nativeAdViewModel.isLoading {
             UINativeAdView(nativeAdViewModel: nativeAdViewModel, adIndex: adIndex)
                 .frame(height: 160)
         } else if nativeAdViewModel.isLoading {

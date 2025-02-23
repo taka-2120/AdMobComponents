@@ -14,6 +14,7 @@ import SwiftUI
 ///
 public struct NativeAdView: View {
     @Environment(NativeAdViewModel.self) private var nativeAdViewModel
+    @State private var isConnected = true
     private let adIndex: Int
 
     public init(showsAt adIndex: Int) {
@@ -21,17 +22,34 @@ public struct NativeAdView: View {
     }
 
     public var body: some View {
-        if !nativeAdViewModel.isLoading {
-            UINativeAdView(nativeAdViewModel: nativeAdViewModel, adIndex: adIndex)
+        Group {
+            if isConnected && !nativeAdViewModel.isLoading {
+                UINativeAdView(nativeAdViewModel: nativeAdViewModel, adIndex: adIndex)
+                    .frame(height: 160)
+            } else if !isConnected {
+                HStack(alignment: .center) {
+                    Spacer()
+                    Image(systemName: "network.slash")
+                        .opacity(0.6)
+                    Text("ad_offline", bundle: .module)
+                    Spacer()
+                }
                 .frame(height: 160)
-        } else {
-            HStack(alignment: .center) {
-                Spacer()
-                ProgressView()
-                Spacer()
+                .background(.regularMaterial)
+            } else {
+                HStack(alignment: .center) {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
+                }
+                .frame(height: 160)
+                .background(.regularMaterial)
             }
-            .frame(height: 160)
-            .background(.regularMaterial)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .onNetworkStatusChanged)) { notification in
+            if let isConnected = notification.userInfo?["isConnected"] as? Bool {
+                self.isConnected = isConnected
+            }
         }
     }
 }

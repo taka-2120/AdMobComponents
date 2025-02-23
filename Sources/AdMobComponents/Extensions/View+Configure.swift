@@ -34,28 +34,38 @@ public extension View {
 }
 
 private struct AdMobConfiguration: ViewModifier {
-    @State private var nativeAdViewModel: NativeAdViewModel
-    private let nativeAdCount: Int
-    private let nativeAdUnitID: String
+    @Environment(\.scenePhase) var scenePhase
+    @State private var hasAppeared = false
 
-    init(
-        nativeAdCount: Int,
-        nativeAdUnitID: String,
-        canLoadNativeAds: Bool,
-        nativeAdRefreshInterval: TimeInterval
-    ) {
-        self.nativeAdCount = nativeAdCount
-        self.nativeAdUnitID = nativeAdUnitID
-        nativeAdViewModel = .init(
-            adCount: nativeAdCount,
-            adUnitID: nativeAdUnitID,
-            canLoadAds: canLoadNativeAds,
-            adRefreshInterval: nativeAdRefreshInterval
-        )
-    }
+    private let networkObserver = NetworkObserver.shared
+    private let nativeAdViewModel = NativeAdViewModel.shared
+    let nativeAdCount: Int
+    let nativeAdUnitID: String
+    let canLoadNativeAds: Bool
+    let nativeAdRefreshInterval: TimeInterval
 
     func body(content: Content) -> some View {
         content
+            .task {
+                guard !hasAppeared else { return }
+                hasAppeared = true
+
+                nativeAdViewModel.apply(
+                    adCount: nativeAdCount,
+                    adUnitID: nativeAdUnitID,
+                    canLoadAds: canLoadNativeAds,
+                    adRefreshInterval: nativeAdRefreshInterval
+                )
+            }
             .environment(nativeAdViewModel)
+            .onChange(of: scenePhase) { _, newPhase in
+                if newPhase == .active {
+                    nativeAdViewModel.startAdRefreshingTimer()
+                    networkObserver.startObservation()
+                } else {
+                    nativeAdViewModel.stopAdRefreshingTimer()
+                    networkObserver.stopObservation()
+                }
+            }
     }
 }

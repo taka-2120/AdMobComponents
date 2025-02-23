@@ -17,22 +17,30 @@ import SwiftUI
 ///
 @Observable
 class NativeAdViewModel: NSObject, GADNativeAdLoaderDelegate, GADNativeAdDelegate {
-    private let adCount: Int
-    private let adUnitID: String
-    private let canLoadAds: Bool
-    private let adRefreshInterval: TimeInterval
+    private var adCount: Int?
+    private var adUnitID: String?
+    private var canLoadAds: Bool?
+    private var adRefreshInterval: TimeInterval?
     private var adRefreshTimer: Timer?
     private var adLoader: GADAdLoader?
     private(set) var nativeAds = [GADNativeAd]()
     private(set) var isLoading = false
     private(set) var unableToLoad = false
 
-    init(adCount: Int, adUnitID: String, canLoadAds: Bool, adRefreshInterval: TimeInterval) {
+    @MainActor static let shared = NativeAdViewModel()
+    override private init() {
+        super.init()
+    }
+
+    deinit {
+        stopAdRefreshingTimer()
+    }
+
+    func apply(adCount: Int, adUnitID: String, canLoadAds: Bool, adRefreshInterval: TimeInterval) {
         self.adCount = adCount
         self.adUnitID = adUnitID
         self.canLoadAds = canLoadAds
         self.adRefreshInterval = adRefreshInterval
-        super.init()
 
         if adRefreshInterval == 0 {
             loadAds()
@@ -41,11 +49,10 @@ class NativeAdViewModel: NSObject, GADNativeAdLoaderDelegate, GADNativeAdDelegat
         }
     }
 
-    deinit {
-        stopAdRefreshingTimer()
-    }
+    func startAdRefreshingTimer() {
+        guard let adRefreshInterval else { return }
+        if adRefreshTimer != nil { return }
 
-    private func startAdRefreshingTimer() {
         adRefreshTimer = Timer.scheduledTimer(
             timeInterval: adRefreshInterval,
             target: self,
@@ -56,15 +63,19 @@ class NativeAdViewModel: NSObject, GADNativeAdLoaderDelegate, GADNativeAdDelegat
         adRefreshTimer?.fire()
     }
 
-    private func stopAdRefreshingTimer() {
+    func stopAdRefreshingTimer() {
         guard let adRefreshTimer else { return }
         adRefreshTimer.invalidate()
         self.adRefreshTimer = nil
     }
 
     @objc private func loadAds() {
-        guard canLoadAds else { return }
+        guard let canLoadAds, let adCount, let adUnitID, canLoadAds else { return }
         isLoading = true
+
+        for ad in nativeAds {
+            ad.unregisterAdView()
+        }
         nativeAds.removeAll()
 
         let multipleAdOptions = GADMultipleAdsAdLoaderOptions()

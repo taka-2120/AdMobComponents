@@ -14,7 +14,6 @@ import SwiftUI
 ///
 public struct NativeAdView: View {
     @Environment(NativeAdViewModel.self) private var nativeAdViewModel
-    @Environment(NetworkObserver.self) private var networkManager
     private let adIndex: Int
 
     public init(showsAt adIndex: Int) {
@@ -22,23 +21,13 @@ public struct NativeAdView: View {
     }
 
     public var body: some View {
-        if networkManager.isConnected && !nativeAdViewModel.isLoading {
+        if !nativeAdViewModel.isLoading {
             UINativeAdView(nativeAdViewModel: nativeAdViewModel, adIndex: adIndex)
                 .frame(height: 160)
-        } else if nativeAdViewModel.isLoading {
-            HStack(alignment: .center) {
-                Spacer()
-                ProgressView()
-                Spacer()
-            }
-            .frame(height: 160)
-            .background(.regularMaterial)
         } else {
             HStack(alignment: .center) {
                 Spacer()
-                Image(systemName: "network.slash")
-                    .opacity(0.6)
-                Text("ad_offline", bundle: .module)
+                ProgressView()
                 Spacer()
             }
             .frame(height: 160)

@@ -34,7 +34,6 @@ public extension View {
 }
 
 private struct AdMobConfiguration: ViewModifier {
-    @State private var networkObserver = NetworkObserver()
     @State private var nativeAdViewModel: NativeAdViewModel
     private let nativeAdCount: Int
     private let nativeAdUnitID: String
@@ -57,7 +56,6 @@ private struct AdMobConfiguration: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .environment(networkObserver)
             .environment(nativeAdViewModel)
     }
 }

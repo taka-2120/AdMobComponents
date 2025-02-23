@@ -9,7 +9,6 @@ import GoogleMobileAds
 import SwiftUI
 
 struct BannerAdView: View {
-    @Environment(NetworkObserver.self) private var networkManager
     private let viewController: BannerAdViewController
 
     init(adUnitID: String) {
@@ -17,22 +16,12 @@ struct BannerAdView: View {
     }
 
     var body: some View {
-        if networkManager.isConnected && !viewController.isLoading {
+        if !viewController.isLoading {
             UIBannerAdView(viewController: viewController)
-        } else if viewController.isLoading {
-            HStack(alignment: .center) {
-                Spacer()
-                ProgressView()
-                Spacer()
-            }
-            .frame(height: 60)
-            .background(.regularMaterial)
         } else {
             HStack(alignment: .center) {
                 Spacer()
-                Image(systemName: "network.slash")
-                    .opacity(0.6)
-                Text("ad_offline", bundle: .module)
+                ProgressView()
                 Spacer()
             }
             .frame(height: 60)

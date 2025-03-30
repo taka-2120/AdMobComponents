@@ -26,6 +26,9 @@ let package = Package(
             resources: [
                 .process("Localizable.xcstrings"),
                 .process("Native/NativeAdView.xib"),
+            ],
+            linkerSettings: [
+                .unsafeFlags(["-ObjC"]),
             ]
         ),
         .testTarget(
